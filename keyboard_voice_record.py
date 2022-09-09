@@ -25,7 +25,7 @@ enable_trigger_record = True
 class VadQueue:
 
     def __init__(self, read_queue: queue.Queue, event: threading.Event, write_queue: queue.Queue, wav_size: int,
-                 move_size:int,
+                 move_size: int,
                  stop_event: threading.Event, model_state,
                  sr=16000, duration=30, bit_size=2):
         self._vad = webrtcvad.Vad(2)
@@ -40,7 +40,7 @@ class VadQueue:
         self.wav_size = wav_size
         self.move_size = move_size
 
-        self._window_size = 20
+        self._window_size = 10
         self._ring_flag = collections.deque(maxlen=self._window_size)
         self._ring_buffer = collections.deque()
         self._cache = bytes()

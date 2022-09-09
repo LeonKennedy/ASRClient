@@ -88,6 +88,16 @@ class ConvEmformer(nn.Module):
         x = self.aux(x)
         return self.log_softmax(x), length - self.right_context_length
 
+    def inference(self, input, input_length):
+        x, length = self.feature_extractor(input, input_length)
+        x = x.transpose(1, 2)
+        x, length = self.conv_layer(x, length)
+        x = x.transpose(1, 2)
+        x, length = self.emformer(x, length)
+        x = self.aux(x)
+        x = x.argmax(-1)
+        return x, length - self.right_context_length
+
     def stream_forward(self, wav, state=None):
         x, length = self.feature_extractor(wav, self.input_length)
         x = x.transpose(1, 2)
